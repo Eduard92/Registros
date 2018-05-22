@@ -1327,102 +1327,104 @@ class Admin extends Admin_Controller
         
     }
     
-    function send_emails($data)
-    {
+
+     function send_emails($data)
+     {
 
       
 
-        $this->load->library(array(
-            'parser','email'
-            
-        ));
-        $this->load->model('eventos/evento_m');
+         $this->load->library(array(
+             'parser','email'
+             
+         ));
+         $this->load->model('eventos/evento_m');
 
-        $result=array(
-            'status' => true ,
-            'message' => false
-        );
-        $input = $this->input->post();
+         $result=array(
+             'status' => true ,
+             'message' => false
+         );
+         $input = $this->input->post();
 
                             
-        if(empty($input)== false)
-        {
-            $subject = $input['subject'];
-            $body    = $input['body'];
+         if(empty($input)== false)
+         {
+             $subject = $input['subject'];
+             $body    = $input['body'];
             
-            $count_sends = 0;
+             $count_sends = 0;
 
-            if (is_numeric($input['emails']))
-            {
-                $email = $this->db->select('email')->where('id',$input['emails'])->get('registros')->result_array();
-                $input['emails'] = $email['0']['email'];
+             if (is_numeric($input['emails']))
+             {
+                 $email = $this->db->select('email')->where('id',$input['emails'])->get('registros')->result_array();
+                 $input['emails'] = $email['0']['email'];
 
-            }
+             }
 
             
-            if(count($input['emails']) > 0)
-            { 
-                $template = $this->db->where('slug',$input['template'])->get('email_templates')->row();
-                json_encode($template);
+             if(count($input['emails']) > 0)
+             { 
+                 $template = $this->db->where('slug',$input['template'])->get('email_templates')->row();
+               //  json_encode($template);
                 
-                if($template)
-                {
-                     $subject = $template->subject;
-                     $body    = $template->body;
-                }
-                $data = array(
-                    'evento'            => $this->evento_m->get($input['evento'])
-                    //$data['registro']           = $this->registro_m->get($post['evento']);
-                    
-                );
+                 if($template)
+                 {
+                      $subject = $template->subject;
+                      $body    = $template->body;
+                 }
+                 $data = array(
+                     'evento'            => $this->evento_m->get($input['evento'])
+                     //$data['registro']           = $this->registro_m->get($post['evento']);
+                     
+                 );
                 
-                $registros = $this->registro_m->where_in('email',$input['emails'])->get_all();
+                 $registros = $this->registro_m->where_in('email',$input['emails'])->get_all();
 
                 //$body = $this->parser->parse_string($body, $data, true);
-                $reply_to = $this->db->select('contact_email')->where('id_evento',$input['evento'])->get('registro_configuracion')->result_array();
-                $reply_to = $reply_to['0']['contact_email'];
+                 $reply_to = $this->db->select('contact_email')->where('id_evento',$input['evento'])->get('registro_configuracion')->result_array();
+                 $reply_to = $reply_to['0']['contact_email'];
 
-                foreach($registros as $registro)
-                {
-                    if(($this->email->valid_email($registro->email))==true)
-                    {                                                
+                 foreach($registros as $registro)
+                 {
+                     if(($this->email->valid_email($registro->email))==true)
+                     {                                                
                         
-                    $data['registro'] = $registro;
+                     $data['registro'] = $registro;
 
-                    $body_send = $this->parser->parse_string($body, $data, true);
+                     $body_send = $this->parser->parse_string($body, $data, true);
 
-                    $this->email->from(Settings::get('server_email'), Settings::get('site_name'));
-                    $this->email->to($registro->email);
-                    $this->email->cc($reply_to?$reply_to:Settings::get('server_email'));
-                    $this->email->subject($subject);
-                    $this->email->message($body_send);                    
+                     $this->email->from(Settings::get('server_email'), Settings::get('site_name'));
+                     $this->email->to($registro->email);
+                     $this->email->cc($reply_to?$reply_to:Settings::get('server_email'));
+                     $this->email->subject($subject);
+                     $this->email->message($body_send);                    
                         
                    
-                        if($this->email->send())
-                        {                
-                                $count_sends ++;
-                                $result['message']  = 'Correo Enviados';
-                        }
+                         if($this->email->send())
+                         {                
+                                 $count_sends ++;
+                                 $result['message']  = 'Correo Enviados';
+                         }
                         
-                        else {
-                            $result['message']  = 'Ocurrio un problema al intentar enviar algun correo ';
-                            $result['status']  = false;
-                        }
+                         else {
+                             $result['message']  = 'Ocurrio un problema al intentar enviar algun correo ';
+                             $result['status']  = false;
+                         }
                                                  
-                    }
-                    else {
-                        $result['message']  = 'Existen Correos Invalidos';
-                    $result['status']  = false;
-                        }
-                                                
-                }
-            }
-         }
-         
-        return $this->template
-                ->build_json($result);
-
+                     }
+                     else {
+                         $result['message']  = 'Existen Correos Invalidos';
+                     $result['status']  = false;
+                         }
+                                                 
+                 }
+             }
+          }
+          
+         return $this->template
+                 ->build_json($result);
+ 
     }
+
     function extraupdate($id_evento=0)
     {
         $registros = $this->db->where(array(

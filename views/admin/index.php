@@ -93,8 +93,8 @@
                                                 </td>
                                                 <?php }?>
                                                 <td>
-                                                    <a href="#"  ng-click="open_modal(<?=$registro->id?>)"><?=$registro->email?></a>
-                                                    <input type="hidden"  ng-model="email" value="<?=$registro->email?>" />    
+                                                     <a href="#"  ng-click="open_modal(<?=$registro->id?>)"><?=$registro->email?></a>
+                                                     <input type="hidden"  ng-model="email" value="<?=$registro->email?>" />    
                                                 </td>
                                                 <td>
                                                      <?php echo anchor('admin/registros/delete/'.$registro->id.'/'.$registro->id_evento, lang('buttons:delete'), 'class="" confirm-action') ?> | 

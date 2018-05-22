@@ -105,11 +105,12 @@ class Admin_configuracion extends Admin_Controller {
 						'label' => 'Plantilla de las columnas',
 						'rules' => 'trim'
 						),
+
                     array(
                         'field' => 'contact_email',
                         'label' => 'Email de Contacto',
                         'rules' => 'trim'
-                        ),
+                        ), 
                     
         );
         $this->load->model('configuracion_m');
@@ -151,7 +152,9 @@ class Admin_configuracion extends Admin_Controller {
                 'javascript'   => $this->input->post('javascript'),
                 'group_by'   => $this->input->post('group_by'),
                 'campos'      => $this->input->post('campos')?json_encode($this->input->post('campos')):null,
+
                 'contact_email'   => $this->input->post('contact_email'),
+
             );
             
             

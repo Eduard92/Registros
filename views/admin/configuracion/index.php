@@ -185,15 +185,15 @@
             </div>
         </div>
         <hr />
-        <div class="form-group row">
-            <div class="col-lg-4"">
+         <div class="form-group row">
+             <div class="col-lg-4"">
                 <label>Email de Contacto</label>
-                <br />
-                <small class="text-muted">Agrega un email de contacto</small>
-            </div>
-            <div class="col-lg-8"><?=form_input('contact_email',$configuracion->contact_email,'class="form-control"')?></div>
-        </div>
-        <hr />
+                 <br />
+                 <small class="text-muted">Agrega un email de contacto</small>
+             </div>
+             <div class="col-lg-8"><?=form_input('contact_email',$configuracion->contact_email,'class="form-control"')?></div>
+         </div>
+         <hr />
         <div class="form-group row">
             <div class="col-lg-4">
                 <label>Javascript</label>
